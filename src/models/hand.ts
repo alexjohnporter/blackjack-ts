@@ -19,4 +19,16 @@ export class Hand {
     isBust() {
         return this.getHandValue() >= 22;
     }
+
+    isBlackJack() {
+        return this.getHandValue() === 21;
+    }
+
+    addCard(card: Card) {
+        this.cards?.push(card);
+    }
+
+    toHumanReadable(): string {
+        return `${this.cards?.map(card => card.toHumanReadable()).join(', ')} for a total value of ${this.getHandValue()}`;
+    }
 }

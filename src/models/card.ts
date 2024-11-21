@@ -27,4 +27,8 @@ export class Card {
         //todo - need to account for Aces
         return 10;
     }
+
+    toHumanReadable(): string {
+        return `${this.value} of ${this.suit}`
+    }
 }

@@ -16,6 +16,13 @@ export class Deck {
         return card;
     }
 
+    dealInitialCards(): Card[] {
+        return [
+            this.dealCard(),
+            this.dealCard()
+        ]
+    }
+
     private getRandomCardIndex(): number {
         return Math.floor(Math.random() * this.cards.length);
     }

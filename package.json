@@ -10,7 +10,8 @@
   "scripts": {
     "start": "tsc && node dist/index.js",
     "build": "tsc",
-    "dev": "tsc -w"
+    "dev": "tsc -w",
+    "start:dev": "node dist/index.js"
   },
   "keywords": [],
   "author": "",
