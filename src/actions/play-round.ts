@@ -84,11 +84,13 @@ export const playRound = async (game: Game): Promise<Game> => {
     // Final comparison of dealer's and player's hands
     if (!dealer.getHand().isBust() && dealer.getHand().getHandValue() > player.getHand().getHandValue()) {
         dealerLog('Dealer wins');
-        finishRound(round);
+    } else if (dealer.getHand().getHandValue() === player.getHand().getHandValue()) {
+        playerLog('It\'s a tie!');
     } else {
         playerLog('You win! 123');
-        finishRound(round);
     }
+
+    finishRound(round);
 
     return game;
 };
