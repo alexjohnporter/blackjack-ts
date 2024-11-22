@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { input, select } from '@inquirer/prompts';
+import { select } from '@inquirer/prompts';
 import { initGame } from './actions/init-game.js';
 import { dealHands } from './actions/deal-hands.js';
 import { playRound } from './actions/play-round.js';
@@ -21,6 +21,7 @@ const startNewRound = async (game: Game, firstRound: boolean = true): Promise<vo
 
         if (!result) {
             game.endGame();
+            console.log('Cards left: ', game.getDeck().getCards().length);
             await playerLog('Thanks for playing!');
             return;
         }

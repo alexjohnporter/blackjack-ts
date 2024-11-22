@@ -63,10 +63,15 @@ export class Game {
     }
 
     endGame(): void {
+        this.endCurrentRound();
         this.status = 'FINISHED';
     }
 
     getStatus(): Status {
         return this.status;
+    }
+
+    getRounds(): Round[] {
+        return this.rounds;
     }
 }
