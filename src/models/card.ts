@@ -25,6 +25,7 @@ export class Card {
         };
 
         //todo - need to account for Aces
+        // Is Ace an automatic 10 unless you go bust where it then turns into a 1?
         return 10;
     }
 

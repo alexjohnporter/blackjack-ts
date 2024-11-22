@@ -16,16 +16,28 @@ export class Hand {
         return value;
     }
 
-    isBust() {
+    doesHandContainAce(): boolean {
+        return false;
+    }
+
+    isBust(): boolean {
         return this.getHandValue() >= 22;
     }
 
-    isBlackJack() {
+    isBlackJack(): boolean {
         return this.getHandValue() === 21;
     }
 
     addCard(card: Card) {
         this.cards?.push(card);
+    }
+
+    showFirstCard(): Card {
+        if (!this.cards) {
+            throw new Error('No cards in hand');
+        }
+
+        return this.cards[0];
     }
 
     toHumanReadable(): string {

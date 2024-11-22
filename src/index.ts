@@ -1,56 +1,36 @@
 #!/usr/bin/env node
 import { input, select } from '@inquirer/prompts';
-import { composeDeck } from './factory/deckFactory.js';
-import { Player } from './models/player.js';
-import { Hand } from './models/hand.js';
-import { Dealer } from './models/dealer.js';
+import { initGame } from './actions/init-game.js';
+import { dealHands } from './actions/deal-hands.js';
+import { playRound } from './actions/play-round.js';
+import { playerLog } from './utils/console.js';
+import { Game } from './models/game.js';
 
-const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
 
+const startNewRound = async (game: Game, firstRound: boolean = true): Promise<void> => {
+    if (!firstRound) {
+        const playAgain = async () => await select({
+            message: 'Do you want to play another round?',
+            choices: [
+                { name: 'Yes', value: true },
+                { name: 'No', value: false },
+            ],
+        })
 
-console.log('Welcome to Blackjack');
+        const result = await playAgain();
 
-sleep(1000);
-
-const playerName = await input({ message: 'Enter your name' });
-
-sleep(1000);
-
-console.log(`Hi ${playerName}, you have £100 to play with. Each bet is £10. Let's get started`);
-
-const deck = composeDeck();
-const player = new Player(playerName, 100);
-const dealer = new Dealer();
-
-player.dealHand(deck.dealInitialCards());
-dealer.dealHand(deck.dealInitialCards());
-
-console.log(`you have ${player.getHand().toHumanReadable()}`);
-
-const action = await select({
-    message: 'Stick or Twist?',
-    choices: [
-        { name: 'Stick', value: 'stick' },
-        { name: 'Twist', value: 'twist' },
-        { name: 'Split', value: 'split', disabled: true }
-    ],
-});
-
-if (action === 'twist') {
-    player.twist(deck.dealCard());
-
-    console.log(`you have ${player.getHand().toHumanReadable()}`);
-
-    if (player.getHand().isBust()) {
-        console.log('Uh oh, you are bust!');
+        if (!result) {
+            game.endGame();
+            await playerLog('Thanks for playing!');
+            return;
+        }
     }
 
-    if (player.getHand().isBlackJack()) {
-        console.log('Congratulation, you have BlackJack');
-    }
+    dealHands(game);
+    await playRound(game);
 
+    startNewRound(game, false);
 }
 
-// console.log(player.getHand().getHandValue());
-
-// console.log(action);
+const game = await initGame();
+await startNewRound(game, true);

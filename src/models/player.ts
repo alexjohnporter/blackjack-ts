@@ -11,10 +11,14 @@ export class Player {
         this.hand = new Hand(null);
     }
 
+    clearHand(): void {
+        this.hand = new Hand(null);
+    }
+
     dealHand(cards: Card[]) {
-        // if (cards.length < 1) {
-        //     throw new Error('No cards dealt');
-        // }
+        if (cards.length < 1) {
+            throw new Error('No cards dealt');
+        }
 
         this.hand = new Hand(cards);
     }
@@ -25,5 +29,9 @@ export class Player {
 
     twist(card: Card) {
         this.hand.addCard(card);
+    }
+
+    isDealer(): boolean {
+        return false;
     }
 }
