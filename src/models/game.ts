@@ -7,14 +7,22 @@ type Status = 'STARTED' | 'FINISHED';
 
 //todo - singleton for Game?
 export class Game {
+    private static instance: Game;
     private startedAt: Date;
     private rounds: Round[];
     private status: Status;
 
-    constructor(private players: Player[], private deck: Deck) {
+    private constructor(private players: Player[], private deck: Deck) {
         this.startedAt = new Date();
         this.rounds = [];
         this.status = 'STARTED';
+    }
+
+    static getInstance(players: Player[], deck: Deck): Game {
+        if (!Game.instance) {
+            Game.instance = new Game(players, deck);
+        }
+        return Game.instance;
     }
 
     getPlayers(): Player[] {

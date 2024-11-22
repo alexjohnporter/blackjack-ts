@@ -21,5 +21,5 @@ export const initGame = async (): Promise<Game> => {
     const player = new Player(playerName, 100);
     const dealer = new Dealer();
 
-    return new Game([player, dealer], deck);
+    return Game.getInstance([player, dealer], deck);
 }
