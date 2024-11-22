@@ -6,7 +6,7 @@ import { Round } from "../models/round.js";
 import { Player } from "../models/player.js";
 import { Deck } from "../models/deck.js";
 
-const finishRound = (round: any) => {
+const finishRound = (round: Round) => {
     round?.finishRound();
 };
 

@@ -1,9 +1,8 @@
-//todo - use proper types to limit value to 2-10 + face cards
-//todo - limit suit to hearts, diamonds, clubs and spades
+export type Suit = 'Diamonds' | 'Hearts' | 'Clubs' | 'Spades';
 
 export class Card {
     constructor(
-        private readonly suit: string,
+        private readonly suit: Suit,
         private readonly value: number | string
     ) { }
 
@@ -24,12 +23,18 @@ export class Card {
             return +this.value
         };
 
-        //todo - need to account for Aces
-        // Is Ace an automatic 10 unless you go bust where it then turns into a 1?
+        if (this.isAce()) {
+            return 11;
+        }
+
         return 10;
     }
 
     toHumanReadable(): string {
         return `${this.value} of ${this.suit}`
+    }
+
+    isAce(): boolean {
+        return this.value === 'Ace';
     }
 }

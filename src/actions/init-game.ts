@@ -3,7 +3,6 @@ import { sleep } from "../utils/sleep.js";
 import { composeDeck } from "../factory/deckFactory.js";
 import { Player } from "../models/player.js";
 import { Dealer } from "../models/dealer.js";
-import chalk from "chalk";
 import { Game } from "../models/game.js";
 import { playerLog } from "../utils/console.js";
 

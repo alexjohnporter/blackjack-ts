@@ -1,9 +1,23 @@
 import cards from '../cards.json' with { type: "json" };
-import { Card } from '../models/card.js';
+import { Card, Suit } from '../models/card.js';
 import { Deck } from '../models/deck.js';
 
-export const composeDeck = (): Deck => {
-    const cardModels = cards.cards.map((card) => new Card(card.suit, card.value));
+const validSuits: Set<Suit> = new Set(['Diamonds', 'Hearts', 'Clubs', 'Spades']);
 
-    return new Deck(cardModels);
+export function isSuit(suit: string): suit is Suit {
+    return validSuits.has(suit as Suit);
 }
+
+export const composeDeck = (): Deck => {
+    const validCards = cards.cards
+        .filter((card): card is { suit: Suit; value: string } => {
+            if (!isSuit(card.suit)) {
+                console.warn(`Invalid suit found: ${card.suit}. Skipping this card.`);
+                return false;
+            }
+            return true;
+        })
+        .map((card) => new Card(card.suit, card.value));
+
+    return new Deck(validCards);
+};

@@ -41,7 +41,9 @@ export class Game {
     }
 
     newRound() {
-        //todo - add functionalitY to expire all other rounds if they are active
+        //ensure no active rounds before creating new round
+        this.rounds.forEach(round => round.finishRound());
+
         this.rounds.push(new Round(this.players));
     }
 

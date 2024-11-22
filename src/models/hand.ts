@@ -5,19 +5,30 @@ export class Hand {
 
     getHandValue(): number {
         if (!this.cards) {
-            return 0
+            return 0;
         }
 
-        let value = 0;
-        for (let i = 0; i < this.cards.length; i++) {
-            value += this.cards[i].getNumberValue();
+        let totalValue = 0;
+        let aceCount = 0;
+
+        // Calculate the initial value of the hand
+        for (const card of this.cards) {
+            const cardValue = card.getNumberValue();
+            if (card.isAce()) {
+                aceCount++;
+                totalValue += 11; // Assume Ace is 11 initially
+            } else {
+                totalValue += cardValue;
+            }
         }
 
-        return value;
-    }
+        // Adjust for Aces if total value exceeds 21
+        while (totalValue > 21 && aceCount > 0) {
+            totalValue -= 10; // Change one Ace from 11 to 1
+            aceCount--;
+        }
 
-    doesHandContainAce(): boolean {
-        return false;
+        return totalValue;
     }
 
     isBust(): boolean {

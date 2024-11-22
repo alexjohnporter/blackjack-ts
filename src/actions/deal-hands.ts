@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import { Game } from "../models/game.js";
 import { dealerLog, playerLog } from "../utils/console.js";
 
