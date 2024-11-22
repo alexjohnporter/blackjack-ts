@@ -5,7 +5,6 @@ import { Round } from "./round.js";
 
 type Status = 'STARTED' | 'FINISHED';
 
-//todo - singleton for Game?
 export class Game {
     private static instance: Game;
     private startedAt: Date;
@@ -60,14 +59,14 @@ export class Game {
     }
 
     getActiveRound(): Round | null {
-        return this.rounds.filter(round => round.getStatus() !== 'Finished')[0] ?? null;
+        return this.rounds.find(round => round.getStatus() !== 'Finished') ?? null;
     }
 
     endGame(): void {
         this.status = 'FINISHED';
     }
 
-    getStatus(): string {
+    getStatus(): Status {
         return this.status;
     }
 }
