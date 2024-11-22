@@ -2,80 +2,93 @@ import { select } from "@inquirer/prompts";
 import { Game } from "../models/game.js";
 import chalk from "chalk";
 import { dealerLog, playerLog } from "../utils/console.js";
-import { dealHands } from "./deal-hands.js";
 
-const stickOrTwist = async () => await select({
+const finishRound = (round: any) => {
+    round?.finishRound();
+};
+
+const stickOrTwist = async (): Promise<'stick' | 'twist'> => await select({
     message: 'Stick or Twist?',
     choices: [
         { name: 'Stick', value: 'stick' },
         { name: 'Twist', value: 'twist' },
-        // { name: 'Split', value: 'split', disabled: true }
     ],
 });
 
+// Check if the player's hand results in a bust or blackjack
+const handlePlayerHand = (player: any, deck: any, round: any, game: Game): boolean => {
+    playerLog(`you have ${player.getHand().toHumanReadable()}`);
+
+    if (player.getHand().isBust()) {
+        finishRound(round);
+        console.log(chalk.bgRed('Uh oh, you are bust!'));
+        return true;
+    }
+
+    if (player.getHand().isBlackJack()) {
+        playerLog('Congratulation, you have BlackJack');
+        finishRound(round);
+        return true;
+    }
+
+    return false;
+};
+
+// Dealer's logic (twisting until hand value is > 17)
+const handleDealerTurn = (dealer: any, deck: any, round: any): void => {
+    dealerLog("It's the dealer's turn!");
+    dealerLog(`Dealer has ${dealer.getHand().toHumanReadable()}`);
+
+    while (dealer.getHand().getHandValue() <= 17) {
+        dealerLog('Dealer twists');
+        dealer.twist(deck.dealCard());
+        dealerLog(`Dealer has ${dealer.getHand().toHumanReadable()}`);
+
+        if (dealer.getHand().isBust()) {
+            finishRound(round);
+            dealerLog('Dealer is bust!');
+            return;
+        }
+
+        if (dealer.getHand().isBlackJack()) {
+            dealerLog('Dealer has blackjack - Dealer wins');
+            finishRound(round);
+            return;
+        }
+    }
+};
+
 export const playRound = async (game: Game): Promise<Game> => {
-    playerLog('Starting round');
-    game.newRound()
+    game.newRound();
 
     const player = game.getActivePlayer();
     const dealer = game.getDealer();
     const deck = game.getDeck();
-    const round = game.getActiveRound();;
+    const round = game.getActiveRound();
 
-    const action = await stickOrTwist()
+    const action = await stickOrTwist();
 
     if (action === 'twist') {
         player.twist(deck.dealCard());
 
-        playerLog(`you have ${player.getHand().toHumanReadable()}`);
-
-        if (player.getHand().isBust()) {
-            round?.updateStatus('Finished')
-
-            console.log(chalk.bgRed('Uh oh, you are bust!'));
+        if (handlePlayerHand(player, deck, round, game)) {
             return game;
         }
 
-        if (player.getHand().isBlackJack()) {
-            playerLog('Congratulation, you have BlackJack');
-            round?.updateStatus('Finished')
-            return game;
-        }
-
-        await playRound(game);
+        // Player hasn't bust or got blackjack, so continue the round
+        return playRound(game);
     } else {
-        dealerLog("It's the dealers turn!");
-        dealerLog(`Dealer has ${dealer.getHand().toHumanReadable()}`);
-
-        while (dealer.getHand().getHandValue() <= 17) {
-            dealerLog('Dealer twists');
-            dealer.twist(deck.dealCard());
-            dealerLog(`Dealer has ${dealer.getHand().toHumanReadable()}`);
-
-            if (dealer.getHand().isBust()) {
-                round?.updateStatus('Finished')
-
-                dealerLog('Dealer is bust!');
-                playerLog('You win!');
-                return game;
-            }
-
-            if (dealer.getHand().isBlackJack()) {
-                //todo - account for scenario where dealer and player have blackjack
-                dealerLog('Dealer has blackjack - Dealer wins');
-                round?.updateStatus('Finished')
-                return game;
-            }
-        }
+        handleDealerTurn(dealer, deck, round);
     }
 
-    if (dealer.getHand().getHandValue() > player.getHand().getHandValue()) {
+    // Final comparison of dealer's and player's hands
+    if (!dealer.getHand().isBust() && dealer.getHand().getHandValue() > player.getHand().getHandValue()) {
         dealerLog('Dealer wins');
-        round?.updateStatus('Finished')
+        finishRound(round);
     } else {
-        playerLog('You win!');
-        round?.updateStatus('Finished')
+        playerLog('You win! 123');
+        finishRound(round);
     }
 
     return game;
-}
+};

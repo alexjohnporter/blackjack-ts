@@ -3,16 +3,18 @@ import { Deck } from "./deck.js";
 import { Player } from "./player.js";
 import { Round } from "./round.js";
 
+type Status = 'STARTED' | 'FINISHED';
+
 //todo - singleton for Game?
 export class Game {
     private startedAt: Date;
     private rounds: Round[];
-    private status: string;
+    private status: Status;
 
     constructor(private players: Player[], private deck: Deck) {
         this.startedAt = new Date();
         this.rounds = [];
-        this.status = 'Started';
+        this.status = 'STARTED';
     }
 
     getPlayers(): Player[] {
@@ -44,7 +46,7 @@ export class Game {
     }
 
     endCurrentRound(): void {
-        this.getActiveRound()?.updateStatus('Finished');
+        this.getActiveRound()?.finishRound();
     }
 
     getActiveRound(): Round | null {
@@ -52,7 +54,7 @@ export class Game {
     }
 
     endGame(): void {
-        this.status = 'Ended';
+        this.status = 'FINISHED';
     }
 
     getStatus(): string {

@@ -1,17 +1,20 @@
 import { Player } from "./player.js";
 
+
+type Status = "STARTED" | "FINISHED";
+
 export class Round {
     //status
     //players
     //active player
-    private status: string;
+    private status: Status;
 
     constructor(private players: Player[]) {
-        this.status = 'Started';
+        this.status = 'STARTED';
     }
 
-    updateStatus(status: string): void {
-        this.status = status;
+    finishRound(): void {
+        this.status = 'FINISHED';
     }
 
     getStatus(): string {
