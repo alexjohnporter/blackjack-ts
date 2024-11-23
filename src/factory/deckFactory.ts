@@ -19,5 +19,9 @@ export const composeDeck = (): Deck => {
         })
         .map((card) => new Card(card.suit, card.value));
 
-    return new Deck(validCards);
+    const deck = new Deck(validCards);
+
+    deck.shuffle();
+
+    return deck;
 };

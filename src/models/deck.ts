@@ -23,6 +23,19 @@ export class Deck {
         ]
     }
 
+    shuffle(): void {
+        const cards = this.cards;
+        let index = cards.length;
+        let randomIndex;
+
+        while (index !== 0) {
+            randomIndex = Math.floor(Math.random() * index);
+            index--;
+
+            [cards[index], cards[randomIndex]] = [cards[randomIndex], cards[index]];
+        }
+    }
+
     private getRandomCardIndex(): number {
         return Math.floor(Math.random() * this.cards.length);
     }

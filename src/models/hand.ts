@@ -16,7 +16,7 @@ export class Hand {
             const cardValue = card.getNumberValue();
             if (card.isAce()) {
                 aceCount++;
-                totalValue += 11; // Assume Ace is 11 initially
+                totalValue += card.getNumberValue()
             } else {
                 totalValue += cardValue;
             }
