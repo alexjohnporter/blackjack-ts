@@ -61,7 +61,7 @@ const handleDealerTurn = (dealer: Player, deck: Deck, round: Round): void => {
     }
 };
 
-export const playRound = async (game: Game): Promise<Game> => {
+export const playRound = async (game: Game): Promise<void> => {
     game.newRound();
 
     const player = game.getActivePlayer();
@@ -83,7 +83,7 @@ export const playRound = async (game: Game): Promise<Game> => {
             player.twist(deck.dealCard());
 
             if (handlePlayerHand(player, round)) {
-                return game;  // End player turn if bust or blackjack
+                return;  // End player turn if bust or blackjack
             }
         }
     }
@@ -101,6 +101,4 @@ export const playRound = async (game: Game): Promise<Game> => {
     }
 
     finishRound(round);
-
-    return game;
 };

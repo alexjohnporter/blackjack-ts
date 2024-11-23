@@ -1,6 +1,6 @@
 import { input } from "@inquirer/prompts";
 import { sleep } from "../utils/sleep.js";
-import { composeDeck } from "../factory/deckFactory.js";
+import { composeDeck, loadCards } from "../factory/deckFactory.js";
 import { Player } from "../models/player.js";
 import { Dealer } from "../models/dealer.js";
 import { Game } from "../models/game.js";
@@ -16,8 +16,9 @@ export const initGame = async (): Promise<Game> => {
 
     playerLog(`Hi ${playerName}, you have £100 to play with. Each bet is £10. Let's get started`)
 
+    const cards = await loadCards();
 
-    const deck = composeDeck();
+    const deck = composeDeck(cards);
     const player = new Player(playerName, 100);
     const dealer = new Dealer();
 

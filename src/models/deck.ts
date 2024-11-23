@@ -2,7 +2,8 @@ import { Card } from "./card.js";
 
 export class Deck {
     constructor(private cards: Card[]) {
-        if (cards.length > 52) throw Error('Too many cards in Deck')
+        if (cards.length < 52) throw Error('Too few cards in Deck');
+        if (cards.length > 52) throw Error('Too many cards in Deck');
     }
 
     getCards(): Card[] {

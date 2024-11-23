@@ -1,4 +1,4 @@
-import { expect, jest, test, describe } from '@jest/globals';
+import { expect, test, describe } from '@jest/globals';
 
 
 import { Card } from "./card.js";
