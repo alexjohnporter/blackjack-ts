@@ -51,7 +51,7 @@ export class Game {
         //ensure no active rounds before creating new round
         this.rounds.forEach(round => round.finishRound());
 
-        this.rounds.push(new Round(this.players));
+        this.rounds.push(new Round());
     }
 
     endCurrentRound(): void {
