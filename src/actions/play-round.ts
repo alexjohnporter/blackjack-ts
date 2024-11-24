@@ -5,6 +5,7 @@ import { dealerLog, playerLog } from "../utils/console.js";
 import { Round } from "../models/round.js";
 import { Player } from "../models/player.js";
 import { Deck } from "../models/deck.js";
+import { sleep } from "../utils/sleep.js";
 
 const finishRound = (round: Round) => {
     round?.finishRound();
@@ -38,14 +39,21 @@ const handlePlayerHand = (player: Player, round: Round,): boolean => {
 };
 
 // Dealer's logic (twisting until hand value is > 17)
-const handleDealerTurn = (dealer: Player, deck: Deck, round: Round): void => {
+const handleDealerTurn = async (dealer: Player, deck: Deck, round: Round): Promise<void> => {
     dealerLog("It's the dealer's turn!");
+    await sleep(1000);
     dealerLog(`Dealer has ${dealer.getHand().toHumanReadable()}`);
+    await sleep(1000);
 
     while (dealer.getHand().getHandValue() <= 17) {
+        await sleep(1000);
+
         dealerLog('Dealer twists');
+        await sleep(1000);
         dealer.twist(deck.dealCard());
         dealerLog(`Dealer has ${dealer.getHand().toHumanReadable()}`);
+
+        await sleep(1000);
 
         if (dealer.getHand().isBust()) {
             finishRound(round);
@@ -77,6 +85,7 @@ export const playRound = async (game: Game): Promise<void> => {
 
     // Player's turn: Repeat until the player sticks, gets blackjack, or goes bust
     while (playerAction === 'twist') {
+        await sleep(1000);
         playerAction = await stickOrTwist();
 
         if (playerAction === 'twist') {
@@ -89,7 +98,9 @@ export const playRound = async (game: Game): Promise<void> => {
     }
 
     // Dealer's turn
-    handleDealerTurn(dealer, deck, round);
+    await handleDealerTurn(dealer, deck, round);
+
+    await sleep(1000);
 
     // Final comparison of dealer's and player's hands
     if (!dealer.getHand().isBust() && dealer.getHand().getHandValue() > player.getHand().getHandValue()) {
