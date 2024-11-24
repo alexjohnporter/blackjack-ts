@@ -1,4 +1,4 @@
-![BlackJack]('https://github.com/alexjohnporter/blackjack-ts/blob/main/blackjack.png')
+![readme-ascii](https://raw.githubusercontent.com/alexjohnporter/blackjack-ts/refs/heads/main/blackjack.png)
 
 # How to run
 * npm i
